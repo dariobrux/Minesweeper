@@ -48,24 +48,86 @@ class GameViewModel : ViewModel() {
     }
 
     /**
-     * Order: west, north-west, north, north-est, est, south-est, south, south-west
+     * Order: west, north-west, north, north-east, east, south-east, south, south-west
      */
     private fun incrementAdjacent(index: Int) {
 
         // Get the adjacent tiles
-        val tileLeft = matrix.getOrNull(index - 1)
-        val tileTop = matrix.getOrNull(index - n)
-        val tileRight = matrix.getOrNull(index + 1)
+        val tileWest = matrix.getOrNull(getWestIndex(index))
+        val tileNorthWest = matrix.getOrNull(getNorthWestIndex(index))
+        val tileNorth = matrix.getOrNull(getNorthIndex(index))
+        val tileNorthEast = matrix.getOrNull(getNorthEastIndex(index))
+        val tileEast = matrix.getOrNull(getEastIndex(index))
         val tileBottom = matrix.getOrNull(index + n)
 
         // Get the random tile between the adjacent.
-        val tile = listOfNotNull(tileLeft, tileTop, tileRight, tileBottom).filterNot {
+        val tile = listOfNotNull(tileWest, tileNorth, tileEast, tileBottom).filterNot {
             it.type == Type.BOMB
         }.shuffled().first()
 
         // Increment the flag.
         tile.type = Type.FLAG
         tile.flags++
+    }
+
+    /**
+     * Get the west index.
+     * @return -1 if the west index is at the column 0.
+     */
+    private fun getWestIndex(index: Int) : Int {
+        val result = index - 1
+        return if (result % n == 0) {
+            -1
+        } else {
+            result
+        }
+    }
+
+    /**
+     * Get the north-west index.
+     * @return -1 if the north-west index is at the column 0.
+     */
+    private fun getNorthWestIndex(index: Int) : Int {
+        val result = index - (n + 1)
+        return if (result % n == 0) {
+            -1
+        } else {
+            result
+        }
+    }
+
+    /**
+     * Get the north index.
+     * @return the north index.
+     */
+    private fun getNorthIndex(index: Int) : Int {
+        return index - n
+    }
+
+    /**
+     * Get the north-east index.
+     * @return -1 if the north-east index is at the column 0.
+     */
+    private fun getNorthEastIndex(index: Int) : Int {
+        val result = index - (n - 1)
+        return if (result % n == 0) {
+            -1
+        } else {
+            result
+        }
+    }
+
+    /**
+     * Get the east index.
+     * @return -1 if the east index is at the column c % n = n.
+     */
+    private fun getEastIndex(index: Int) : Int {
+        val result = index + 1
+        return if (result % n == 0) {
+            -1
+        } else {
+            result
+        }
     }
 
 }
