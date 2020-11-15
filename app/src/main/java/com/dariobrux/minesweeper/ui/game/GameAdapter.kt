@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.State
@@ -34,10 +35,18 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
 
         // Write on the tile only if the tile is discovered
         if (item.state == State.DISCOVERED) {
-            if (item.type == Type.BOMB) {
-                holder.img.toVisible()
-            } else {
-                holder.txt.text = item.flags.toString()
+            when (item.type) {
+                Type.BOMB -> {
+                    holder.img.toVisible()
+                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red_600))
+                }
+                Type.EMPTY -> {
+                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey_900))
+                }
+                else -> {
+                    holder.txt.text = item.flags.toString()
+                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.orange_200))
+                }
             }
         }
 
