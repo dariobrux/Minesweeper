@@ -35,13 +35,17 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             it.layoutManager = GridLayoutManager(requireContext(), tiles.size.sqrt())
             it.adapter = adapter
         }
+
+        // Observe the score and update the TextView when the score changes
+        viewModel.score.observe(this.viewLifecycleOwner) {
+            txtScore?.text = getString(R.string.score_format, it)
+        }
     }
 
     override fun onItemSelected(item: Tile, position: Int) {
         viewModel.selectTile(item, position) {
             adapter.notifyItemChanged(it)
         }
-        adapter.notifyItemChanged(position)
     }
 
 }

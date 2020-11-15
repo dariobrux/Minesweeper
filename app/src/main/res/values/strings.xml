@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Minesweeper</string>
     <string name="bomb">Bomb</string>
+    <string name="score_format">Score: %d</string>
 </resources>
