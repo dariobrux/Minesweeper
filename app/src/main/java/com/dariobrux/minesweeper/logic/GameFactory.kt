@@ -11,7 +11,7 @@ class GameFactory {
     private val n = 8
     private val totalBombs = 15
 
-    fun getField() {
+    fun getBoard(): List<Tile> {
 
         // Get all the position of the bombs. This means that I'll put
         // the bombs at these positions.
@@ -38,6 +38,8 @@ class GameFactory {
                     .joinToString(separator = "\t\t", prefix = "\t\t").replace("-1", "B")
             )
         }
+
+        return matrix.toList()
     }
 
     /**

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.dariobrux.minesweeper.GameFragment"
+        android:name="com.dariobrux.minesweeper.ui.game.GameFragment"
         android:label="game_fragment"
-        tools:layout="@layout/game_fragment" />
+        tools:layout="@layout/fragment_game" />
 </navigation>

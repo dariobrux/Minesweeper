@@ -1,7 +1,8 @@
-package com.dariobrux.minesweeper
+package com.dariobrux.minesweeper.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dariobrux.minesweeper.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
