@@ -7,16 +7,32 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.dariobrux.kotimer.Timer
+import com.dariobrux.kotimer.interfaces.OnTimerListener
+import com.dariobrux.kotimer.interfaces.OnTimerListenerAdapter
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.other.sqrt
+import com.dariobrux.minesweeper.other.toRemainingTime
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
 
     private val viewModel: GameViewModel by viewModels()
+
+    // The game timer
+    private val timer: Timer = Timer().apply {
+        setDuration(120_000L)
+        setOnTimerListener(object : OnTimerListenerAdapter() {
+            override fun onTimerRun(milliseconds: Long) {
+                txtTimer?.text = milliseconds.toRemainingTime()
+            }
+        }, true)
+    }
 
     private lateinit var adapter: GameAdapter
 
@@ -40,6 +56,8 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         viewModel.score.observe(this.viewLifecycleOwner) {
             txtScore?.text = getString(R.string.score_format, it)
         }
+
+        timer.start()
     }
 
     override fun onItemSelected(item: Tile, position: Int) {
@@ -47,5 +65,4 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             adapter.notifyItemChanged(it)
         }
     }
-
 }
