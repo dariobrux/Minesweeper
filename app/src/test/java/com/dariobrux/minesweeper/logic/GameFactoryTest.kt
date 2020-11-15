@@ -3,8 +3,6 @@ package com.dariobrux.minesweeper.logic
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -55,14 +53,43 @@ class GameFactoryTest : TestCase() {
     }
 
     @Test
-    fun testNorthIndex() {
+    fun testNorthWestIndex() {
         assertEquals(factory.getNorthWestIndex(9), 0)
         assertEquals(factory.getNorthWestIndex(12), 3)
         assertEquals(factory.getNorthWestIndex(15), 6)
-        assertEquals(factory.getNorthWestIndex(17), 8)
-        assertEquals(factory.getNorthWestIndex(31), 22)
-        assertEquals(factory.getNorthWestIndex(41), 32)
-        assertEquals(factory.getNorthWestIndex(47), 38)
+        assertEquals(factory.getNorthWestIndex(25), 16)
+        assertEquals(factory.getNorthWestIndex(39), 30)
+        assertEquals(factory.getNorthWestIndex(44), 35)
+        assertEquals(factory.getNorthWestIndex(55), 46)
+        assertEquals(factory.getNorthWestIndex(57), 48)
+        assertEquals(factory.getNorthWestIndex(60), 51)
+        assertEquals(factory.getNorthWestIndex(63), 54)
+    }
+
+    @Test
+    fun testNorthInvalidIndex() {
+        assertEquals(factory.getNorthIndex(0), -1)
+        assertEquals(factory.getNorthIndex(1), -1)
+        assertEquals(factory.getNorthIndex(2), -1)
+        assertEquals(factory.getNorthIndex(3), -1)
+        assertEquals(factory.getNorthIndex(4), -1)
+        assertEquals(factory.getNorthIndex(5), -1)
+        assertEquals(factory.getNorthIndex(6), -1)
+        assertEquals(factory.getNorthIndex(7), -1)
+    }
+
+    @Test
+    fun testNorthIndex() {
+        assertEquals(factory.getNorthIndex(8), 0)
+        assertEquals(factory.getNorthIndex(9), 1)
+        assertEquals(factory.getNorthIndex(15), 7)
+        assertEquals(factory.getNorthIndex(17), 9)
+        assertEquals(factory.getNorthIndex(31), 23)
+        assertEquals(factory.getNorthIndex(41), 33)
+        assertEquals(factory.getNorthIndex(47), 39)
+        assertEquals(factory.getNorthIndex(56), 48)
+        assertEquals(factory.getNorthIndex(60), 52)
+        assertEquals(factory.getNorthIndex(63), 55)
     }
 
     @Test

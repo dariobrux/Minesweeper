@@ -60,3 +60,6 @@ lint/tmp/
 # lint/reports/
 
 .DS_Store
+
+.gradle
+.idea
