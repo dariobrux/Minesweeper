@@ -38,7 +38,9 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
     }
 
     override fun onItemSelected(item: Tile, position: Int) {
-        item.discover()
+        viewModel.selectTile(item, position) {
+            adapter.notifyItemChanged(it)
+        }
         adapter.notifyItemChanged(position)
     }
 

@@ -1,6 +1,7 @@
 package com.dariobrux.minesweeper.logic
 
 import android.util.Log
+import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.other.shuffled
@@ -157,6 +158,33 @@ class GameFactory {
             it.type = Type.FLAG
             it.flags++
         }
+    }
+
+    /**
+     * Clean the adjacent tiles until the flag is reached
+     */
+    fun cleanAdjacent(index: Int, onClean: (Tile, Int) -> Unit) {
+
+        // Get the tile at index to check if the logic must continue or stop.
+        val tile = matrix.getOrNull(index)
+        tile ?: return
+
+        // If is a flag clean it but stops to iterate.
+        if (tile.type == Type.FLAG || tile.state == State.DISCOVERED) {
+            onClean.invoke(tile, index)
+            return
+        }
+
+        // Continue iteration
+        onClean.invoke(tile, index)
+        cleanAdjacent(getWestIndex(index), onClean)
+        cleanAdjacent(getNorthWestIndex(index), onClean)
+        cleanAdjacent(getNorthIndex(index), onClean)
+        cleanAdjacent(getNorthEastIndex(index), onClean)
+        cleanAdjacent(getEastIndex(index), onClean)
+        cleanAdjacent(getSouthEastIndex(index), onClean)
+        cleanAdjacent(getSouthIndex(index), onClean)
+        cleanAdjacent(getSouthWestIndex(index), onClean)
     }
 
     /**
