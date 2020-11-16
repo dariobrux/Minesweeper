@@ -31,7 +31,7 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      * @param position the index of the tile in board.
      * @param onDiscovered function to invoke when the tile is processed.
      */
-    fun selectTile(tile: Tile, position: Int, onDiscovered: (Int) -> Unit) {
+    fun selectTile(tile: Tile, position: Int, onDiscovered: (Int, Int) -> Unit) {
 
         // Return if a tile has already been discovered.
         if (tile.state == State.DISCOVERED) {
@@ -72,9 +72,9 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      * @param index the index of the tile in board.
      * @param onDiscovered callback to come back to the UI.
      */
-    private fun processTile(tile: Tile, index: Int, onDiscovered: (Int) -> Unit) {
-        tile.discover()
-        onDiscovered.invoke(index)
+    private fun processTile(tile: Tile, index: Int, onDiscovered: (Int, Int) -> Unit) {
+        val remainingNotBombTiles = gameFactory.discoverTile(tile)
+        onDiscovered.invoke(index, remainingNotBombTiles)
     }
 
     /**
@@ -83,7 +83,7 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      * @param index the index of the tile in board.
      * @param onDiscovered callback to come back to the UI.
      */
-    private fun processTileScore(tile: Tile, index: Int, onDiscovered: (Int) -> Unit) {
+    private fun processTileScore(tile: Tile, index: Int, onDiscovered: (Int, Int) -> Unit) {
         processTile(tile, index, onDiscovered)
         score.value = score.value?.plus(1)
     }

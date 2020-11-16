@@ -33,7 +33,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer game.
      */
     private val timer: Timer = Timer().apply {
-        setDuration(120_000)
+        setDuration(180_000)
         setOnTimerListener(object : OnTimerListenerAdapter() {
 
             /**
@@ -99,13 +99,22 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
 
     /**
      * Invoked when a tile is clicked.
+     * If the tile is a bomb, lose game.
+     * If the remaining tiles are 0, win game
      * @param item the tile clicked
      * @param position the position of the tile in the grid
      */
     override fun onItemSelected(item: Tile, position: Int) {
-        viewModel.selectTile(item, position) {
-            adapter.notifyItemChanged(it)
+        viewModel.selectTile(item, position) { index, remainingNotBombTiles ->
+            adapter.notifyItemChanged(index)
+
+            // There are not other valid tiles to discover. You win
+            if (remainingNotBombTiles == 0) {
+                endGame(EndCause.WIN)
+            }
         }
+
+        // You have discover a bomb. You lose.
         if (item.type == Type.BOMB) {
             endGame(EndCause.BOMB)
             return
@@ -138,6 +147,11 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
                 builder.setMessage(getString(R.string.message_lost_game_timer))
                 builder.setBackgroundColor(R.color.red_600)
             }
+            EndCause.WIN -> {
+                builder.setTitle(getString(R.string.great))
+                builder.setMessage(getString(R.string.message_win_game))
+                builder.setBackgroundColor(R.color.green_400)
+            }
         }
 
         builder.show().view
@@ -148,6 +162,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      */
     private enum class EndCause {
         BOMB,
-        TIMER
+        TIMER,
+        WIN
     }
 }

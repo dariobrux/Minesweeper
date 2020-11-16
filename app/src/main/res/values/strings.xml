@@ -6,4 +6,6 @@
     <string name="message_lost_game_bomb">You are on a bomb! You\'ve lost the game.</string>
     <string name="message_lost_game_timer">The timer\'s ended! You\'ve lost the game.</string>
     <string name="new_game">New Game</string>
+    <string name="great">Great!</string>
+    <string name="message_win_game">You\'ve discovered all tiles! You have won the game.</string>
 </resources>

@@ -8,15 +8,35 @@ import com.dariobrux.minesweeper.other.shuffled
 
 class GameFactory {
 
+    /**
+     * The board
+     */
     private lateinit var matrix: Array<Tile>
+
+    /**
+     * How many valid tiles remains. The valid tiles are the empty and flag tiles.
+     */
+    private var remainingNotBombTiles = 0
+
+    /**
+     * The length of the board side.
+     */
     private val n = 8
+
+    /**
+     * How many bombs in the grid
+     */
     private val totalBombs = 15
 
+    /**
+     * Create the board.
+     * @return the list with all tiles.
+     */
     fun getBoard(): List<Tile> {
 
-        // Get all the position of the bombs. This means that I'll put
-        // the bombs at these positions.
+        remainingNotBombTiles = (n * n) - totalBombs
 
+        // Create the matrix with all empty tiles.
         matrix = Array(n * n) { Tile() }
 
         // Create a list with all indexes
@@ -143,7 +163,7 @@ class GameFactory {
         val tileSouthWest = matrix.getOrNull(getSouthWestIndex(position))
 
         // Get the random tile between the adjacent.
-        val adjacentTilesNotBomb = listOfNotNull(
+        listOfNotNull(
             tileWest,
             tileNorthWest,
             tileNorth,
@@ -158,6 +178,17 @@ class GameFactory {
             it.type = Type.FLAG
             it.flags++
         }
+    }
+
+    /**
+     * Discover the tile.
+     * @param tile the [Tile] to discover.
+     * @return the remaining not bomb tiles.
+     */
+    fun discoverTile(tile: Tile) : Int {
+        tile.discover()
+        remainingNotBombTiles--
+        return remainingNotBombTiles
     }
 
     /**
