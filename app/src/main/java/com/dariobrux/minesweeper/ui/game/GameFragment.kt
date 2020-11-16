@@ -33,7 +33,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer game.
      */
     private val timer: Timer = Timer().apply {
-        setDuration(180_000)
+        setDuration(240_000)
         setOnTimerListener(object : OnTimerListenerAdapter() {
 
             /**
@@ -86,11 +86,13 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         // Initialize the board
         val tiles = viewModel.getBoard()
 
-        // Initialize the adapter and populate the grid
-        adapter = GameAdapter(requireContext(), tiles, this)
-        grid?.let {
-            it.layoutManager = GridLayoutManager(requireContext(), tiles.size.sqrt())
-            it.adapter = adapter
+        grid?.post {
+            // Initialize the adapter and populate the grid
+            adapter = GameAdapter(requireContext(), tiles, this)
+            grid?.let {
+                it.layoutManager = GridLayoutManager(requireContext(), tiles.size.sqrt())
+                it.adapter = adapter
+            }
         }
 
         // Start the timer
