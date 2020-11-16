@@ -22,7 +22,7 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
     /**
      * Used by other classes to enable or disable the click on items.
      */
-    var isEnabled = true
+    var isEnabled = false
 
     interface OnItemSelectedListener {
 

@@ -12,10 +12,7 @@ import com.dariobrux.kotimer.interfaces.OnTimerListenerAdapter
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
-import com.dariobrux.minesweeper.other.sqrt
-import com.dariobrux.minesweeper.other.toGone
-import com.dariobrux.minesweeper.other.toRemainingTime
-import com.dariobrux.minesweeper.other.toVisible
+import com.dariobrux.minesweeper.other.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
@@ -30,10 +27,38 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
     private val viewModel: GameViewModel by viewModels()
 
     /**
+     * This is the timer that appears when the app launches, showind a countdown
+     * in the middle of the screen.
+     */
+    private val timerPreLaunch : Timer = Timer().apply {
+        setDuration(Constants.TIMER_COUNTDOWN)
+        setOnTimerListener(object : OnTimerListenerAdapter() {
+
+            /**
+             * Invoked when the timer ends.
+             * When this timer ends, start the game timer.
+             */
+            override fun onTimerEnded() {
+                txtPreTimer?.toGone()
+                adapter.isEnabled = true
+                timerGame.start()
+            }
+
+            /**
+             * Invoked every seconds
+             * @param milliseconds the current milliseconds elapsed.
+             */
+            override fun onTimerRun(milliseconds: Long) {
+                txtPreTimer?.text = milliseconds.toFormattedTime("s")
+            }
+        }, true)
+    }
+
+    /**
      * This is the timer game.
      */
-    private val timer: Timer = Timer().apply {
-        setDuration(240_000)
+    private val timerGame: Timer = Timer().apply {
+        setDuration(Constants.TIMER_GAME)
         setOnTimerListener(object : OnTimerListenerAdapter() {
 
             /**
@@ -41,7 +66,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
              * @param milliseconds the current milliseconds elapsed.
              */
             override fun onTimerRun(milliseconds: Long) {
-                txtTimer?.text = milliseconds.toRemainingTime()
+                setTimerTextFormat(milliseconds)
             }
 
             /**
@@ -51,6 +76,10 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
                 endGame(EndCause.TIMER)
             }
         }, true)
+    }
+
+    private fun setTimerTextFormat(milliseconds: Long) {
+        txtTimer?.text = milliseconds.toFormattedTime("m:ss")
     }
 
     /**
@@ -95,8 +124,11 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             }
         }
 
+        setTimerTextFormat(Constants.TIMER_GAME)
+
         // Start the timer
-        timer.start()
+        txtPreTimer?.toVisible()
+        timerPreLaunch.start()
     }
 
     /**
@@ -129,7 +161,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * @param endResult the [EndCause]
      */
     private fun endGame(endResult: EndCause) {
-        timer.stop()
+        timerGame.stop()
         adapter.isEnabled = false
         txtNewGame?.toVisible()
 
