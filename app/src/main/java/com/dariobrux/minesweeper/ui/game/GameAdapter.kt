@@ -19,6 +19,11 @@ import com.google.android.material.card.MaterialCardView
 
 class GameAdapter(private val context: Context, private val items: List<Tile>, private val listener: OnItemSelectedListener?) : RecyclerView.Adapter<GameViewHolder>() {
 
+    /**
+     * Used by other classes to enable or disable the click on items.
+     */
+    var isEnabled = true
+
     interface OnItemSelectedListener {
         fun onItemSelected(item: Tile, position: Int)
     }
@@ -52,6 +57,7 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
 
         // Add the listener on click
         holder.card.setOnClickListener {
+            if (!isEnabled) return@setOnClickListener
             listener?.onItemSelected(item, position)
         }
     }

@@ -2,4 +2,7 @@
     <string name="app_name">Minesweeper</string>
     <string name="bomb">Bomb</string>
     <string name="score_format">Score: %d</string>
+    <string name="oh_no">Oh no!</string>
+    <string name="message_lost_game_bomb">You are on a bomb! You\'ve lost the game.</string>
+    <string name="message_lost_game_timer">The timer\'s ended! You\'ve lost the game.</string>
 </resources>
