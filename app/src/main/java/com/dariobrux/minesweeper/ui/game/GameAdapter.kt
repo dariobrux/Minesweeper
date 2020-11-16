@@ -25,6 +25,12 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
     var isEnabled = true
 
     interface OnItemSelectedListener {
+
+        /**
+         * Invoked when a tile is clicked.
+         * @param item the tile clicked
+         * @param position the position of the tile in the grid
+         */
         fun onItemSelected(item: Tile, position: Int)
     }
 

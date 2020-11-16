@@ -20,6 +20,7 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      * @return the list with all [Tile] representing the board.
      */
     fun getBoard(): List<Tile> {
+        score.value = 0
         return gameFactory.getBoard()
     }
 

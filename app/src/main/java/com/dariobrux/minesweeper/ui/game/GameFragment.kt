@@ -13,7 +13,9 @@ import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.other.sqrt
+import com.dariobrux.minesweeper.other.toGone
 import com.dariobrux.minesweeper.other.toRemainingTime
+import com.dariobrux.minesweeper.other.toVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
@@ -31,7 +33,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer game.
      */
     private val timer: Timer = Timer().apply {
-        setDuration(120_000L)
+        setDuration(120_000)
         setOnTimerListener(object : OnTimerListenerAdapter() {
 
             /**
@@ -51,6 +53,9 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         }, true)
     }
 
+    /**
+     * The grid adapter
+     */
     private lateinit var adapter: GameAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,6 +65,24 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startGame()
+
+        // Observe the score and update the TextView when the score changes
+        viewModel.score.observe(this.viewLifecycleOwner) {
+            txtScore?.text = getString(R.string.score_format, it)
+        }
+
+        txtNewGame?.setOnClickListener {
+            it.toGone()
+            startGame()
+            CookieBar.dismiss(requireActivity())
+        }
+    }
+
+    /**
+     * Start the game creating the board, populating the grid and starting the timer.
+     */
+    private fun startGame() {
         // Initialize the board
         val tiles = viewModel.getBoard()
 
@@ -70,15 +93,15 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             it.adapter = adapter
         }
 
-        // Observe the score and update the TextView when the score changes
-        viewModel.score.observe(this.viewLifecycleOwner) {
-            txtScore?.text = getString(R.string.score_format, it)
-        }
-
         // Start the timer
         timer.start()
     }
 
+    /**
+     * Invoked when a tile is clicked.
+     * @param item the tile clicked
+     * @param position the position of the tile in the grid
+     */
     override fun onItemSelected(item: Tile, position: Int) {
         viewModel.selectTile(item, position) {
             adapter.notifyItemChanged(it)
@@ -89,29 +112,35 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         }
     }
 
+    /**
+     * Call this method when the game ends. It handles all the end causes,
+     * stopping the timer and letting appear the new game label.
+     * @param endResult the [EndCause]
+     */
     private fun endGame(endResult: EndCause) {
         timer.stop()
         adapter.isEnabled = false
+        txtNewGame?.toVisible()
 
         // Create a CookieBar to display a message at the bottom
-        val cookieBar = CookieBar.build(requireActivity())
+        val builder = CookieBar.build(requireActivity())
             .setDuration(10_000)
             .setCookiePosition(CookieBar.BOTTOM)
 
         when (endResult) {
             EndCause.BOMB -> {
-                cookieBar.setTitle(getString(R.string.oh_no))
-                cookieBar.setMessage(getString(R.string.message_lost_game_bomb))
-                cookieBar.setBackgroundColor(R.color.red_600)
+                builder.setTitle(getString(R.string.oh_no))
+                builder.setMessage(getString(R.string.message_lost_game_bomb))
+                builder.setBackgroundColor(R.color.red_600)
             }
             EndCause.TIMER -> {
-                cookieBar.setTitle(getString(R.string.oh_no))
-                cookieBar.setMessage(getString(R.string.message_lost_game_timer))
-                cookieBar.setBackgroundColor(R.color.red_600)
+                builder.setTitle(getString(R.string.oh_no))
+                builder.setMessage(getString(R.string.message_lost_game_timer))
+                builder.setBackgroundColor(R.color.red_600)
             }
         }
 
-        cookieBar.show()
+        builder.show().view
     }
 
     /**
