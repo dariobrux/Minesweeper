@@ -7,7 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 13/11/2020.
  *
  * This is the main activity, where the application starts its
  * navigation.

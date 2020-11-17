@@ -4,7 +4,7 @@ import android.view.View
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 15/11/2020.
  *
  * This class contains all the extended method for the View
  *

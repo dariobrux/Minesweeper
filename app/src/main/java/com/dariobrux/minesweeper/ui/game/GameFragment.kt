@@ -20,7 +20,7 @@ import org.aviran.cookiebar2.CookieBar
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 13/11/2020.
  *
  * This is the game fragment, where you can play.
  *

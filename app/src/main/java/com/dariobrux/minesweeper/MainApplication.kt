@@ -5,7 +5,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 14/11/2020.
  *
  * This is the application class declared in Manifest.
  *

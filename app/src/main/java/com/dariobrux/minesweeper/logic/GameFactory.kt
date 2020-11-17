@@ -8,7 +8,7 @@ import com.dariobrux.minesweeper.other.extension.shuffled
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 14/11/2020.
  *
  * This class is the core. Creates the logic of the game.
  * Creates the board [n] x [n] with empty tiles.

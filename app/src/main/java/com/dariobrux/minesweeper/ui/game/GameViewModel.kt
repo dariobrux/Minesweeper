@@ -10,7 +10,7 @@ import com.dariobrux.minesweeper.logic.GameFactory
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 13/11/2020.
  *
  * This is the ViewModel, with logic interaction between the game and the fragment.
  *

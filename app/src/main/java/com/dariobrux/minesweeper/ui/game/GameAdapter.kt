@@ -18,7 +18,7 @@ import com.google.android.material.card.MaterialCardView
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 15/11/2020.
  *
  * This class is the adapter for the grid that shows each tile on the board in the RecyclerView.
  *

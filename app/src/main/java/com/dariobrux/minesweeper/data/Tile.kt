@@ -2,7 +2,7 @@ package com.dariobrux.minesweeper.data
 
 /**
  *
- * Created by Dario Bruzzese on 17/11/2020.
+ * Created by Dario Bruzzese on 14/11/2020.
  *
  * This is the tile model. Represent every item of the board.
  * [type] could be [Type.EMPTY], [Type.FLAG] and [Type.BOMB],
