@@ -1,11 +1,8 @@
 package com.dariobrux.minesweeper.logic
 
-import com.dariobrux.minesweeper.data.State
-import com.dariobrux.minesweeper.data.Tile
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -28,6 +25,100 @@ class GameFactoryTest : TestCase() {
         val list = Array(n * n) { it }
         val factoryList = factory.getNxNShuffledList()
         assertEquals(factoryList.size, list.size)
+    }
+
+    @Test
+    fun testGetAdjacentPositionsCornersSize() {
+        val actualSize = 3
+        assertEquals(factory.getAdjacentPositions(0).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(7).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(56).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(63).size, actualSize)
+    }
+
+    @Test
+    fun testGetAdjacentPositionsSideSize() {
+        val actualSize = 5
+        assertEquals(factory.getAdjacentPositions(1).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(3).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(6).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(8).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(15).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(32).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(39).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(48).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(55).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(57).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(59).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(62).size, actualSize)
+    }
+
+    @Test
+    fun testGetAdjacentPositionsInsideSize() {
+        val actualSize = 8
+        assertEquals(factory.getAdjacentPositions(9).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(11).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(14).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(33).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(36).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(38).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(49).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(51).size, actualSize)
+        assertEquals(factory.getAdjacentPositions(54).size, actualSize)
+    }
+
+    @Test
+    fun testGetAdjacentPositionsCornerTopLeft() {
+        val adjacentPositions = factory.getAdjacentPositions(0)
+        assertTrue(adjacentPositions.containsAll(listOf(1, 8, 9)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsCornerTopRight() {
+        val adjacentPositions = factory.getAdjacentPositions(7)
+        assertTrue(adjacentPositions.containsAll(listOf(6, 14, 15)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsCornerBottomLeft() {
+        val adjacentPositions = factory.getAdjacentPositions(56)
+        assertTrue(adjacentPositions.containsAll(listOf(48, 49, 57)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsCornerBottomRight() {
+        val adjacentPositions = factory.getAdjacentPositions(63)
+        assertTrue(adjacentPositions.containsAll(listOf(54, 55, 62)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsSideTop() {
+        val adjacentPositions = factory.getAdjacentPositions(3)
+        assertTrue(adjacentPositions.containsAll(listOf(2, 4, 10, 11, 12)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsSideLeft() {
+        val adjacentPositions = factory.getAdjacentPositions(32)
+        assertTrue(adjacentPositions.containsAll(listOf(24, 25, 33, 40, 41)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsSideRight() {
+        val adjacentPositions = factory.getAdjacentPositions(39)
+        assertTrue(adjacentPositions.containsAll(listOf(30, 31, 38, 46, 47)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsSideBottom() {
+        val adjacentPositions = factory.getAdjacentPositions(59)
+        assertTrue(adjacentPositions.containsAll(listOf(50, 51, 52, 58, 60)))
+    }
+
+    @Test
+    fun testGetAdjacentPositionsInside() {
+        val adjacentPositions = factory.getAdjacentPositions(35)
+        assertTrue(adjacentPositions.containsAll(listOf(26, 27, 28, 34, 36, 42, 43, 44)))
     }
 
     @Test

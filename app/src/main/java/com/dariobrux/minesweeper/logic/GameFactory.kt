@@ -48,7 +48,8 @@ class GameFactory {
             // at that position.
             bombPositions.getOrNull(index)?.let { bombPosition ->
                 matrix[bombPosition] = Tile(Type.BOMB, -1)
-                incrementAdjacent(bombPosition)
+                val adjacentTiles = getAdjacentNoBombTiles(bombPosition)
+                incrementAdjacent(adjacentTiles)
             }
         }
 
@@ -126,33 +127,52 @@ class GameFactory {
     }
 
     /**
+     * Get all the adjacent tiles around [position]. These tiles aren't bombs.
      * Order: west, north-west, north, north-east, east, south-east, south, south-west
      */
-    private fun incrementAdjacent(position: Int) {
+    private fun getAdjacentNoBombTiles(position: Int): List<Tile> = getAdjacentPositions(position).mapNotNull {
+        matrix.getOrNull(it)
+    }.filterNot {
+        it.type == Type.BOMB
+    }
 
-        // Get the adjacent tiles
-        val tileWest = matrix.getOrNull(getWestIndex(position))
-        val tileNorthWest = matrix.getOrNull(getNorthWestIndex(position))
-        val tileNorth = matrix.getOrNull(getNorthIndex(position))
-        val tileNorthEast = matrix.getOrNull(getNorthEastIndex(position))
-        val tileEast = matrix.getOrNull(getEastIndex(position))
-        val tileSouthEast = matrix.getOrNull(getSouthEastIndex(position))
-        val tileSouth = matrix.getOrNull(getSouthIndex(position))
-        val tileSouthWest = matrix.getOrNull(getSouthWestIndex(position))
+    /**
+     * Get the list with all adjacent positions.
+     * This positions are the matrix indexes.
+     * @param position start from this position.
+     * @return the list with the adjacent positions.
+     */
+    fun getAdjacentPositions(position: Int): List<Int> {
+        val west = getWestIndex(position)
+        val northWest = getNorthWestIndex(position)
+        val north = getNorthIndex(position)
+        val northEast = getNorthEastIndex(position)
+        val east = getEastIndex(position)
+        val southEast = getSouthEastIndex(position)
+        val south = getSouthIndex(position)
+        val southWest = getSouthWestIndex(position)
 
-        // Get the random tile between the adjacent.
-        listOfNotNull(
-            tileWest,
-            tileNorthWest,
-            tileNorth,
-            tileNorthEast,
-            tileEast,
-            tileSouthEast,
-            tileSouth,
-            tileSouthWest
+        // Get the adjacent positions excluding the outside indexes (-1).
+        return listOf(
+            west,
+            northWest,
+            north,
+            northEast,
+            east,
+            southEast,
+            south,
+            southWest
         ).filterNot {
-            it.type == Type.BOMB
-        }.forEach {
+            it == -1
+        }
+    }
+
+    /**
+     * Increment the flags of the adjacent tiles.
+     * @param tiles the list of all the adjacent tiles.
+     */
+    private fun incrementAdjacent(tiles: List<Tile>) {
+        tiles.forEach {
             it.type = Type.FLAG
             it.flags++
         }
@@ -163,7 +183,7 @@ class GameFactory {
      * @param tile the [Tile] to discover.
      * @return the remaining not bomb tiles.
      */
-    fun discoverTile(tile: Tile) : Int {
+    fun discoverTile(tile: Tile): Int {
         tile.discover()
         remainingNotBombTiles--
         return remainingNotBombTiles
