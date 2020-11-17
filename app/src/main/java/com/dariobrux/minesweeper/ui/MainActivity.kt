@@ -5,6 +5,17 @@ import android.os.Bundle
 import com.dariobrux.minesweeper.R
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This is the main activity, where the application starts its
+ * navigation.
+ *
+ * It is annotated by AndroidEntryPoint to integrate Hilt in this
+ * activity.
+ *
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

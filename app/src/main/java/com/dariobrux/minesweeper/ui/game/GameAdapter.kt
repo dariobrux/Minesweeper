@@ -1,7 +1,6 @@
 package com.dariobrux.minesweeper.ui.game
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -17,6 +16,13 @@ import com.dariobrux.minesweeper.other.extension.toVisible
 import com.dariobrux.minesweeper.ui.game.GameAdapter.GameViewHolder
 import com.google.android.material.card.MaterialCardView
 
+/**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This class is the adapter for the grid that shows each tile on the board in the RecyclerView.
+ *
+ */
 class GameAdapter(private val context: Context, private val items: List<Tile>, private val listener: OnItemSelectedListener?) : RecyclerView.Adapter<GameViewHolder>() {
 
     /**
@@ -35,7 +41,7 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): GameViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.item_tile, null)
+        val view = View.inflate(context, R.layout.item_tile, null);
         val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, viewGroup.width / items.size.sqrt())
         view.layoutParams = params
         return GameViewHolder(view)
@@ -48,20 +54,13 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
         if (item.state == State.DISCOVERED) {
             when (item.type) {
                 Type.BOMB -> {
-                    if (item.isTouched) {
-                        holder.img.setImageResource(R.drawable.explosion)
-                    } else {
-                        holder.img.setImageResource(R.drawable.bomb)
-                    }
-                    holder.img.toVisible()
-                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red_600))
+                    configureDiscoveredBombs(holder, item)
                 }
                 Type.EMPTY -> {
-                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey_900))
+                    configureDiscoveredEmpty(holder)
                 }
                 else -> {
-                    holder.txt.text = item.flags.toString()
-                    holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.orange_200))
+                    configureDiscoveredFlags(holder, item)
                 }
             }
         }
@@ -71,6 +70,41 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
             if (!isEnabled) return@setOnClickListener
             listener?.onItemSelected(item, position)
         }
+    }
+
+    /**
+     * Configure the flag tile when it has been discovered.
+     * @param holder the [GameViewHolder].
+     * @param item the [Tile] selected.
+     */
+    private fun configureDiscoveredFlags(holder: GameViewHolder, item: Tile) {
+        holder.txt.text = item.flags.toString()
+        holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.orange_200))
+    }
+
+    /**
+     * Configure the empty tile when it has been discovered.
+     * @param holder the [GameViewHolder].
+     */
+    private fun configureDiscoveredEmpty(holder: GameViewHolder) {
+        holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey_900))
+    }
+
+    /**
+     * Configure the bomb in the adapter when it has been discovered.
+     * If the tile has been touched, set the explosion image.
+     * Other bomb tiles uses the bomb image.
+     * @param holder the [GameViewHolder].
+     * @param item the [Tile] selected.
+     */
+    private fun configureDiscoveredBombs(holder: GameViewHolder, item: Tile) {
+        if (item.isTouched) {
+            holder.img.setImageResource(R.drawable.explosion)
+        } else {
+            holder.img.setImageResource(R.drawable.bomb)
+        }
+        holder.img.toVisible()
+        holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red_600))
     }
 
     override fun getItemCount(): Int {

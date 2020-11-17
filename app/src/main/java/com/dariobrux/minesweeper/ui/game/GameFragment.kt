@@ -18,6 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
 
+/**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This is the game fragment, where you can play.
+ *
+ */
 @AndroidEntryPoint
 class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
 

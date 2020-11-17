@@ -8,6 +8,13 @@ import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.logic.GameFactory
 
+/**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This is the ViewModel, with logic interaction between the game and the fragment.
+ *
+ */
 class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFactory) : ViewModel() {
 
     /**

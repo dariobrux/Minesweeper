@@ -7,6 +7,14 @@ import android.os.Vibrator
 import java.util.concurrent.TimeUnit
 
 /**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This class contains all the extended method for the Context
+ *
+ */
+
+/**
  * Perform a vibration
  * @param duration the vibration duration
  */

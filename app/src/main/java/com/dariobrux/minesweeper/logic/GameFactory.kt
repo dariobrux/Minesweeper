@@ -6,6 +6,24 @@ import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.other.extension.shuffled
 
+/**
+ *
+ * Created by Dario Bruzzese on 17/11/2020.
+ *
+ * This class is the core. Creates the logic of the game.
+ * Creates the board [n] x [n] with empty tiles.
+ * Create a list with the bomb positions, shuffled, checking if the
+ * adjacent positions are valid. Generally, a bomb position is valid when around
+ * it, there aren't only bombs.
+ * - When a tile is selected and it's a [Type.FLAG] tile, it changes its state to [State.DISCOVERED] and [Tile.isTouched] true.
+ * - When a tile is selected and it's a [Type.EMPTY] tile, it changes its state to [State.DISCOVERED] and [Tile.isTouched] true, but also the
+ * tiles around it will be discovered, until a flag is reached. It will be discovered too.
+ * - When a tile is selected and it's a [Type.BOMB] flag, it changes its state to [State.DISCOVERED]  and [Tile.isTouched] true, but also the
+ * other bombs will be discovered, without change their [Tile.isTouched] value.
+ * When the user discovers [n] * [n] - [totalBombs] tiles, he wins.
+ * When the user discovers a bomb, he loses.
+ *
+ */
 class GameFactory {
 
     /**
@@ -54,7 +72,7 @@ class GameFactory {
             bombPositions.getOrNull(index)?.let { bombPosition ->
                 matrix[bombPosition] = Tile(Type.BOMB, -1)
                 val adjacentTiles = getAdjacentNoBombTiles(bombPosition)
-                incrementAdjacent(adjacentTiles)
+                incrementAllAdjacent(adjacentTiles)
             }
         }
 
@@ -167,11 +185,19 @@ class GameFactory {
      * Increment the flags of the adjacent tiles.
      * @param tiles the list of all the adjacent tiles.
      */
-    private fun incrementAdjacent(tiles: List<Tile>) {
+    private fun incrementAllAdjacent(tiles: List<Tile>) {
         tiles.forEach {
-            it.type = Type.FLAG
-            it.flags++
+            incrementFlag(it)
         }
+    }
+
+    /**
+     * Increment the value of flags of a tile
+     * @param tile the [Tile] on which increment flags.
+     */
+    private fun incrementFlag(tile: Tile) {
+        tile.type = Type.FLAG
+        tile.flags++
     }
 
     /**
@@ -179,7 +205,7 @@ class GameFactory {
      * @param tile the [Tile] to discover.
      * @return the remaining not bomb tiles.
      */
-    fun discoverTile(tile: Tile, isTouched : Boolean): Int {
+    fun discoverTile(tile: Tile, isTouched: Boolean): Int {
         tile.discover()
         if (isTouched) {
             tile.touched()
