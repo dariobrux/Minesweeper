@@ -198,16 +198,28 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
                 builder.setTitle(getString(R.string.oh_no))
                 builder.setMessage(getString(R.string.message_lost_game_bomb))
                 builder.setBackgroundColor(R.color.red_600)
+                txtPreTimer?.let {
+                    it.text = getString(R.string.you_lost)
+                    it.toVisible()
+                }
             }
             EndCause.TIMER -> {
                 builder.setTitle(getString(R.string.oh_no))
                 builder.setMessage(getString(R.string.message_lost_game_timer))
                 builder.setBackgroundColor(R.color.red_600)
+                txtPreTimer?.let {
+                    it.text = getString(R.string.you_lost)
+                    it.toVisible()
+                }
             }
             EndCause.WIN -> {
                 builder.setTitle(getString(R.string.great))
                 builder.setMessage(getString(R.string.message_win_game))
                 builder.setBackgroundColor(R.color.green_400)
+                txtPreTimer?.let {
+                    it.text = getString(R.string.you_win)
+                    it.toVisible()
+                }
             }
         }
 

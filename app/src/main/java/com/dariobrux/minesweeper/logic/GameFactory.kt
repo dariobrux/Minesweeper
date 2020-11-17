@@ -5,6 +5,7 @@ import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.other.extension.shuffled
+import timber.log.Timber
 
 /**
  *
@@ -76,12 +77,9 @@ class GameFactory {
             }
         }
 
+        // Print the matrix in LogCat
         for (i in 0 until (n * n) step n) {
-            Log.d(
-                "PRINT",
-                matrix.sliceArray(i until i + n).map { it.flags }
-                    .joinToString(separator = "\t\t", prefix = "\t\t").replace("-1", "B")
-            )
+            Timber.tag(TAG).d(matrix.sliceArray(i until i + n).map { it.flags }.joinToString(separator = "\t\t", prefix = "\t\t").replace("-1", "B"))
         }
 
         return matrix.toList()
@@ -353,4 +351,7 @@ class GameFactory {
         }
     }
 
+    companion object {
+        private const val TAG = "GameFactory"
+    }
 }

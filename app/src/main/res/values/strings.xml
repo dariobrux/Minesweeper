@@ -9,4 +9,6 @@
     <string name="great">Great!</string>
     <string name="message_win_game">You\'ve discovered all tiles! You have won the game.</string>
     <string name="start">Start!</string>
+    <string name="you_lost">You\'ve\nlost!</string>
+    <string name="you_win">You\'re the\nWinner!</string>
 </resources>
