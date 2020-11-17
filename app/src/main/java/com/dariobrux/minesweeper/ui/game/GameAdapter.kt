@@ -48,6 +48,11 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
         if (item.state == State.DISCOVERED) {
             when (item.type) {
                 Type.BOMB -> {
+                    if (item.isTouched) {
+                        holder.img.setImageResource(R.drawable.explosion)
+                    } else {
+                        holder.img.setImageResource(R.drawable.bomb)
+                    }
                     holder.img.toVisible()
                     holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red_600))
                 }

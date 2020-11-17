@@ -39,12 +39,12 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
         }
 
         // Check the state.
-        // If Bomb, the tile discovers but the game ends.
+        // If Bomb, the discover all the bombs and the game ends.
         // If Empty, clean and process the adjacent tiles and increment score.
         // If Flag, discover the tile, process the adjacent and increment score.
         when (tile.type) {
             Type.BOMB -> {
-                processAllBombs(onDiscovered)
+                processAllBombs(position, onDiscovered)
             }
             Type.EMPTY -> {
 
@@ -55,12 +55,12 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
                     }
 
                     // Discover the processed tiles incrementing score.
-                    processTileScore(adjacentTile, index, onDiscovered)
+                    processTileScore(adjacentTile, position, index, onDiscovered)
                 }
             }
             else -> {
 
-                // Discover the processed tiles incrementing score.
+                // Discover the processed tile incrementing score.
                 processTileScore(tile, position, onDiscovered)
             }
         }
@@ -68,31 +68,46 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
 
     /**
      * Discover all the bombs.
+     * @param touchedIndex the index of the touched tile in board.
      * @param onDiscovered the function to invoke when the bombs have been discovered.
      */
-    private fun processAllBombs(onDiscovered: (Int, Int) -> Unit) {
-        gameFactory.discoverAllBombs(onDiscovered)
+    private fun processAllBombs(touchedIndex: Int, onDiscovered: (Int, Int) -> Unit) {
+        gameFactory.discoverAllBombs(touchedIndex, onDiscovered)
     }
 
     /**
      * Discover the tile, launch callback to come back to the UI.
      * @param tile the tile to discover.
+     * @param touchedIndex the index of the touched tile in board.
      * @param index the index of the tile in board.
      * @param onDiscovered callback to come back to the UI.
      */
-    private fun processTile(tile: Tile, index: Int, onDiscovered: (Int, Int) -> Unit) {
-        val remainingNotBombTiles = gameFactory.discoverTile(tile)
+    private fun processTile(tile: Tile, touchedIndex: Int, index: Int, onDiscovered: (Int, Int) -> Unit) {
+        val isTouched = index == touchedIndex
+        val remainingNotBombTiles = gameFactory.discoverTile(tile, isTouched)
         onDiscovered.invoke(index, remainingNotBombTiles)
     }
 
     /**
      * Discover the tile, launch callback to come back to the UI and increment the score.
      * @param tile the tile to discover.
+     * @param touchedIndex the index of the touched tile in board.
      * @param index the index of the tile in board.
      * @param onDiscovered callback to come back to the UI.
      */
-    private fun processTileScore(tile: Tile, index: Int, onDiscovered: (Int, Int) -> Unit) {
-        processTile(tile, index, onDiscovered)
+    private fun processTileScore(tile: Tile, touchedIndex: Int, index: Int, onDiscovered: (Int, Int) -> Unit) {
+        processTile(tile, touchedIndex, index, onDiscovered)
+        score.value = score.value?.plus(1)
+    }
+
+    /**
+     * Discover the tile, launch callback to come back to the UI and increment the score.
+     * @param tile the tile to discover.
+     * @param touchedIndex the index of the touched tile in board.
+     * @param onDiscovered callback to come back to the UI.
+     */
+    private fun processTileScore(tile: Tile, touchedIndex: Int, onDiscovered: (Int, Int) -> Unit) {
+        processTile(tile, touchedIndex, touchedIndex, onDiscovered)
         score.value = score.value?.plus(1)
     }
 }

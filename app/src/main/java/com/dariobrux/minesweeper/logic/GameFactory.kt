@@ -179,19 +179,25 @@ class GameFactory {
      * @param tile the [Tile] to discover.
      * @return the remaining not bomb tiles.
      */
-    fun discoverTile(tile: Tile): Int {
+    fun discoverTile(tile: Tile, isTouched : Boolean): Int {
         tile.discover()
+        if (isTouched) {
+            tile.touched()
+        }
         remainingNotBombTiles--
         return remainingNotBombTiles
     }
 
     /**
      * Iterate the bomb positions list discovering the correspondent tile.
+     * @param touchedIndex the index of the touched tile in board.
      * @param onDiscovered the function to invoke when the bombs are discovered.
      */
-    fun discoverAllBombs(onDiscovered: (Int, Int) -> Unit) {
+    fun discoverAllBombs(touchedIndex: Int, onDiscovered: (Int, Int) -> Unit) {
         bombPositions.forEach {
-            onDiscovered.invoke(it, discoverTile(matrix[it]))
+            val tile = matrix[it]
+            val isTouched = it == touchedIndex
+            onDiscovered.invoke(it, discoverTile(tile, isTouched))
         }
     }
 
