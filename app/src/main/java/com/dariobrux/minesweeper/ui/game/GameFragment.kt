@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
 
-
 @AndroidEntryPoint
 class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
 
