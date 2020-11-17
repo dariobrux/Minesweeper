@@ -79,7 +79,7 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
      */
     private fun configureDiscoveredFlags(holder: GameViewHolder, item: Tile) {
         holder.txt.text = item.flags.toString()
-        holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.orange_200))
+        holder.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.green_200))
     }
 
     /**
