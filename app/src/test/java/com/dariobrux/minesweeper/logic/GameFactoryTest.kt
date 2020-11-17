@@ -1,8 +1,11 @@
 package com.dariobrux.minesweeper.logic
 
+import com.dariobrux.minesweeper.data.State
+import com.dariobrux.minesweeper.data.Tile
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -11,6 +14,21 @@ import org.robolectric.annotation.Config
 class GameFactoryTest : TestCase() {
 
     private val factory = GameFactory()
+
+    @Test
+    fun testGetBoard() {
+        val n = 8
+        val board = factory.getBoard()
+        assertEquals(board.size, n * n)
+    }
+
+    @Test
+    fun getNxNShuffledList() {
+        val n = 8
+        val list = Array(n * n) { it }
+        val factoryList = factory.getNxNShuffledList()
+        assertEquals(factoryList.size, list.size)
+    }
 
     @Test
     fun testWestInvalidIndex() {

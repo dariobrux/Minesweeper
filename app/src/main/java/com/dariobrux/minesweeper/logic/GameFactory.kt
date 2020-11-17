@@ -71,7 +71,7 @@ class GameFactory {
     private fun getBombPositions(): MutableList<Int> {
 
         // All the possible positions shuffled.
-        val positions = Array(n * n) { it }.shuffled().toMutableList()
+        val positions = getNxNShuffledList()
 
         // The future bombs positions without no check.
         val bombPositions = positions.take(totalBombs).toMutableList()
@@ -87,6 +87,11 @@ class GameFactory {
         return bombPositions
 
     }
+
+    /**
+     * @return a list of 0..(n x n) shuffled items
+     */
+    fun getNxNShuffledList() = Array(n * n) { it }.shuffled().toMutableList()
 
     /**
      * Check if the bomb position is valid. It means that around it, it must not be:
@@ -118,33 +123,6 @@ class GameFactory {
             bombPositions[index] = newValue
             checkValidBombIndex(newValue, index, bombPositions, unusedBombPositions)
         }
-    }
-
-    /**
-     * Check if the [position] is at the corner of the matrix
-     * @param position an index in matrix
-     * @return true if the position is a corner, false if is not a corner.
-     */
-    private fun isCorner(position: Int): Boolean {
-        return position == 0 || position == n - 1 || position == ((n * n) - n) || position == (n * n) - 1
-    }
-
-    /**
-     * Check if the [position] is at the side of the matrix
-     * @param position an index in matrix
-     * @return true if the position is at side, false if is not at side.
-     */
-    private fun isSide(position: Int): Boolean {
-        return position < n || position % n == 0 || position % n == n - 1 || position >= (n * n) - n
-    }
-
-    /**
-     * Check if the [position] is inside the matrix
-     * @param position an index in matrix
-     * @return true if the position is inside, false if is not inside.
-     */
-    private fun isInside(position: Int): Boolean {
-        return !isCorner(position) && !isSide(position)
     }
 
     /**

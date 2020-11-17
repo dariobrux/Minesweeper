@@ -4,6 +4,8 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:strokeWidth="0.5dp"
+    app:strokeColor="@color/blue_grey_900_alpha_80"
     app:cardBackgroundColor="@color/orange_200">
 
     <FrameLayout
