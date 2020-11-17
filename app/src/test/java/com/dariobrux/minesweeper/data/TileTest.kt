@@ -12,4 +12,12 @@ class TileTest : TestCase() {
             discover()
         }.state)
     }
+
+    @Test
+    fun testTouched() {
+        val tile = Tile(isTouched = false)
+        assertEquals(true, tile.apply {
+            touched()
+        }.isTouched)
+    }
 }
