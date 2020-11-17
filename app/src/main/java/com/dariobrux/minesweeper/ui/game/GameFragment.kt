@@ -1,7 +1,7 @@
 package com.dariobrux.minesweeper.ui.game
 
+import android.content.Context
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +11,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
+import com.dariobrux.minesweeper.logic.manager.ITimerManagerListener
+import com.dariobrux.minesweeper.logic.manager.TimerManager
 import com.dariobrux.minesweeper.other.Constants
 import com.dariobrux.minesweeper.other.extension.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  *
@@ -37,51 +41,66 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer that appears when the app launches, showing a countdown
      * in the middle of the screen.
      */
-    private val timerPreLaunch: CountDownTimer = object : CountDownTimer(Constants.TIMER_COUNTDOWN, 1000L) {
-
-        /**
-         * Invoked when the timer ends.
-         * When this timer ends, start the game timer.
-         */
-        override fun onFinish() {
-            txtPreTimer?.toGone()
-            adapter.isEnabled = true
-            timerGame.start()
-        }
-
-        /**
-         * Invoked every seconds
-         * @param millisUntilFinished the current milliseconds elapsed.
-         */
-        override fun onTick(millisUntilFinished: Long) {
-            Timber.tag(TAG).d("Game starts in $millisUntilFinished")
-            txtPreTimer?.text = if (millisUntilFinished != 0L) {
-                millisUntilFinished.toFormattedTime("s")
-            } else {
-                getString(R.string.start)
-            }
-        }
-    }
+    @Inject
+    @Named("shortTimer")
+    lateinit var timerPreLaunch: TimerManager
 
     /**
      * This is the timer game.
      */
-    private val timerGame = object : CountDownTimer(Constants.TIMER_GAME, 1000L) {
+    @Inject
+    @Named("longTimer")
+    lateinit var timerGame: TimerManager
 
-        /**
-         * Invoked when the timer ends
-         */
-        override fun onFinish() {
-            endGame(EndCause.TIMER)
-        }
+    private var cookieBar: CookieBar? = null
 
-        /**
-         * Invoked every seconds
-         * @param millisUntilFinished the current milliseconds elapsed.
-         */
-        override fun onTick(millisUntilFinished: Long) {
-            setTimerTextFormat(millisUntilFinished)
-        }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        timerPreLaunch.init(object : ITimerManagerListener {
+
+            /**
+             * Invoked every seconds
+             * @param millis the current milliseconds elapsed.
+             */
+            override fun onTimerRun(millis: Long) {
+                Timber.tag(TAG).d("Game starts in $millis")
+                txtPreTimer?.text = if (millis != 0L) {
+                    millis.toFormattedTime("s")
+                } else {
+                    getString(R.string.start)
+                }
+            }
+
+            /**
+             * Invoked when the timer ends.
+             * When this timer ends, start the game timer.
+             */
+            override fun onTimerFinish() {
+                txtPreTimer?.toGone()
+                adapter.isEnabled = true
+                timerGame.start()
+            }
+        })
+
+        timerGame.init(object : ITimerManagerListener {
+
+            /**
+             * Invoked every seconds
+             * @param millis the current milliseconds elapsed.
+             */
+            override fun onTimerRun(millis: Long) {
+                setTimerTextFormat(millis)
+            }
+
+            /**
+             * Invoked when the timer ends
+             */
+            override fun onTimerFinish() {
+                endGame(EndCause.TIMER)
+            }
+
+        })
     }
 
     private fun setTimerTextFormat(milliseconds: Long) {
@@ -110,7 +129,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         txtNewGame?.setOnClickListener {
             it.toGone()
             startGame()
-            CookieBar.dismiss(requireActivity())
+            cookieBar?.dismiss()
         }
     }
 
@@ -221,7 +240,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             }
         }
 
-        builder.show().view
+        cookieBar = builder.show()
     }
 
     /**
