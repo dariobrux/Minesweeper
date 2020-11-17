@@ -8,4 +8,5 @@
     <string name="new_game">New Game</string>
     <string name="great">Great!</string>
     <string name="message_win_game">You\'ve discovered all tiles! You have won the game.</string>
+    <string name="start">Start!</string>
 </resources>

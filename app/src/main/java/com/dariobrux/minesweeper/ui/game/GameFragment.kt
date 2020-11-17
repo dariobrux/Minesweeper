@@ -1,6 +1,7 @@
 package com.dariobrux.minesweeper.ui.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.dariobrux.minesweeper.other.extension.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
+import timber.log.Timber
 
 /**
  *
@@ -56,7 +58,12 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
              * @param milliseconds the current milliseconds elapsed.
              */
             override fun onTimerRun(milliseconds: Long) {
-                txtPreTimer?.text = milliseconds.toFormattedTime("s")
+                Timber.tag(TAG).d("Game starts in $milliseconds")
+                txtPreTimer?.text = if (milliseconds != 0L) {
+                    milliseconds.toFormattedTime("s")
+                } else {
+                    getString(R.string.start)
+                }
             }
         }, true)
     }
@@ -207,6 +214,12 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         builder.show().view
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timerGame.stop()
+        timerPreLaunch.stop()
+    }
+
     /**
      * Enum used to indicate the ending cause of the game.
      */
@@ -214,5 +227,9 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         BOMB,
         TIMER,
         WIN
+    }
+
+    companion object {
+        private const val TAG = "GameFragment"
     }
 }

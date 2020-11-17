@@ -2,6 +2,9 @@ package com.dariobrux.minesweeper
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+
 
 /**
  *
@@ -11,4 +14,14 @@ import dagger.hilt.android.HiltAndroidApp
  *
  */
 @HiltAndroidApp
-class MainApplication : Application()
+class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        // Init Timber
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        }
+    }
+}
