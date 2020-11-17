@@ -143,25 +143,16 @@ class GameFactory {
      * @return the list with the adjacent positions.
      */
     fun getAdjacentPositions(position: Int): List<Int> {
-        val west = getWestIndex(position)
-        val northWest = getNorthWestIndex(position)
-        val north = getNorthIndex(position)
-        val northEast = getNorthEastIndex(position)
-        val east = getEastIndex(position)
-        val southEast = getSouthEastIndex(position)
-        val south = getSouthIndex(position)
-        val southWest = getSouthWestIndex(position)
-
         // Get the adjacent positions excluding the outside indexes (-1).
         return listOf(
-            west,
-            northWest,
-            north,
-            northEast,
-            east,
-            southEast,
-            south,
-            southWest
+            getWestIndex(position),
+            getNorthWestIndex(position),
+            getNorthIndex(position),
+            getNorthEastIndex(position),
+            getEastIndex(position),
+            getSouthEastIndex(position),
+            getSouthIndex(position),
+            getSouthWestIndex(position)
         ).filterNot {
             it == -1
         }
