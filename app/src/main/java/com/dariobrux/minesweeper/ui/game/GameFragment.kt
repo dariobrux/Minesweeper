@@ -30,7 +30,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer that appears when the app launches, showind a countdown
      * in the middle of the screen.
      */
-    private val timerPreLaunch : Timer = Timer().apply {
+    private val timerPreLaunch: Timer = Timer().apply {
         setDuration(Constants.TIMER_COUNTDOWN)
         setOnTimerListener(object : OnTimerListenerAdapter() {
 
@@ -145,13 +145,13 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
             // There are not other valid tiles to discover. You win
             if (remainingNotBombTiles == 0) {
                 endGame(EndCause.WIN)
+                return@selectTile
             }
         }
 
         // You have discover a bomb. You lose.
         if (item.type == Type.BOMB) {
             endGame(EndCause.BOMB)
-            return
         }
     }
 

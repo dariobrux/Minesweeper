@@ -29,6 +29,11 @@ class GameFactory {
     private val totalBombs = 15
 
     /**
+     * This list contains all bomb indexes in matrix.
+     */
+    private var bombPositions = emptyList<Int>()
+
+    /**
      * Create the board.
      * @return the list with all tiles.
      */
@@ -40,7 +45,7 @@ class GameFactory {
         matrix = Array(n * n) { Tile() }
 
         // Create a list with all indexes
-        val bombPositions = getBombPositions()
+        bombPositions = getBombValidPositions()
 
         repeat(n * n) { index ->
 
@@ -69,7 +74,7 @@ class GameFactory {
      * It also check the validity of the index.
      * @return the list with all bombs positions.
      */
-    private fun getBombPositions(): MutableList<Int> {
+    private fun getBombValidPositions(): MutableList<Int> {
 
         // All the possible positions shuffled.
         val positions = getNxNShuffledList()
@@ -178,6 +183,16 @@ class GameFactory {
         tile.discover()
         remainingNotBombTiles--
         return remainingNotBombTiles
+    }
+
+    /**
+     * Iterate the bomb positions list discovering the correspondent tile.
+     * @param onDiscovered the function to invoke when the bombs are discovered.
+     */
+    fun discoverAllBombs(onDiscovered: (Int, Int) -> Unit) {
+        bombPositions.forEach {
+            onDiscovered.invoke(it, discoverTile(matrix[it]))
+        }
     }
 
     /**

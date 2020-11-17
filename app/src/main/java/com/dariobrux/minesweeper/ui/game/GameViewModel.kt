@@ -44,7 +44,7 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
         // If Flag, discover the tile, process the adjacent and increment score.
         when (tile.type) {
             Type.BOMB -> {
-                processTile(tile, position, onDiscovered)
+                processAllBombs(onDiscovered)
             }
             Type.EMPTY -> {
 
@@ -64,6 +64,14 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
                 processTileScore(tile, position, onDiscovered)
             }
         }
+    }
+
+    /**
+     * Discover all the bombs.
+     * @param onDiscovered the function to invoke when the bombs have been discovered.
+     */
+    private fun processAllBombs(onDiscovered: (Int, Int) -> Unit) {
+        gameFactory.discoverAllBombs(onDiscovered)
     }
 
     /**
