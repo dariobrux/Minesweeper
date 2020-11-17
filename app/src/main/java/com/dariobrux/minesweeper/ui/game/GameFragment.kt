@@ -226,12 +226,6 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         builder.show().view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        timerGame.stop()
-        timerPreLaunch.stop()
-    }
-
     /**
      * Enum used to indicate the ending cause of the game.
      */
