@@ -1,19 +1,17 @@
 package com.dariobrux.minesweeper.ui.game
 
 import android.os.Bundle
-import android.util.Log
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dariobrux.kotimer.Timer
-import com.dariobrux.kotimer.interfaces.OnTimerListenerAdapter
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
-import com.dariobrux.minesweeper.other.*
+import com.dariobrux.minesweeper.other.Constants
 import com.dariobrux.minesweeper.other.extension.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
@@ -39,57 +37,51 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * This is the timer that appears when the app launches, showing a countdown
      * in the middle of the screen.
      */
-    private val timerPreLaunch: Timer = Timer().apply {
-        setDuration(Constants.TIMER_COUNTDOWN)
-        setOnTimerListener(object : OnTimerListenerAdapter() {
+    private val timerPreLaunch: CountDownTimer = object : CountDownTimer(Constants.TIMER_COUNTDOWN, 1000L) {
 
-            /**
-             * Invoked when the timer ends.
-             * When this timer ends, start the game timer.
-             */
-            override fun onTimerEnded() {
-                txtPreTimer?.toGone()
-                adapter.isEnabled = true
-                timerGame.start()
-            }
+        /**
+         * Invoked when the timer ends.
+         * When this timer ends, start the game timer.
+         */
+        override fun onFinish() {
+            txtPreTimer?.toGone()
+            adapter.isEnabled = true
+            timerGame.start()
+        }
 
-            /**
-             * Invoked every seconds
-             * @param milliseconds the current milliseconds elapsed.
-             */
-            override fun onTimerRun(milliseconds: Long) {
-                Timber.tag(TAG).d("Game starts in $milliseconds")
-                txtPreTimer?.text = if (milliseconds != 0L) {
-                    milliseconds.toFormattedTime("s")
-                } else {
-                    getString(R.string.start)
-                }
+        /**
+         * Invoked every seconds
+         * @param millisUntilFinished the current milliseconds elapsed.
+         */
+        override fun onTick(millisUntilFinished: Long) {
+            Timber.tag(TAG).d("Game starts in $millisUntilFinished")
+            txtPreTimer?.text = if (millisUntilFinished != 0L) {
+                millisUntilFinished.toFormattedTime("s")
+            } else {
+                getString(R.string.start)
             }
-        }, true)
+        }
     }
 
     /**
      * This is the timer game.
      */
-    private val timerGame: Timer = Timer().apply {
-        setDuration(Constants.TIMER_GAME)
-        setOnTimerListener(object : OnTimerListenerAdapter() {
+    private val timerGame = object : CountDownTimer(Constants.TIMER_GAME, 1000L) {
 
-            /**
-             * Invoked every seconds
-             * @param milliseconds the current milliseconds elapsed.
-             */
-            override fun onTimerRun(milliseconds: Long) {
-                setTimerTextFormat(milliseconds)
-            }
+        /**
+         * Invoked when the timer ends
+         */
+        override fun onFinish() {
+            endGame(EndCause.TIMER)
+        }
 
-            /**
-             * Invoked when the timer ends
-             */
-            override fun onTimerEnded() {
-                endGame(EndCause.TIMER)
-            }
-        }, true)
+        /**
+         * Invoked every seconds
+         * @param millisUntilFinished the current milliseconds elapsed.
+         */
+        override fun onTick(millisUntilFinished: Long) {
+            setTimerTextFormat(millisUntilFinished)
+        }
     }
 
     private fun setTimerTextFormat(milliseconds: Long) {
@@ -145,6 +137,12 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         timerPreLaunch.start()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        timerPreLaunch.cancel()
+        timerGame.cancel()
+    }
+
     /**
      * Invoked when a tile is clicked.
      * If the tile is a bomb, lose game.
@@ -184,7 +182,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * @param endResult the [EndCause]
      */
     private fun endGame(endResult: EndCause) {
-        timerGame.stop()
+        timerGame.cancel()
         adapter.isEnabled = false
         txtNewGame?.toVisible()
 

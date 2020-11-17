@@ -79,8 +79,4 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    // Timer
-    implementation 'com.github.dariobrux:timer:1.1.0'
-    
 }
