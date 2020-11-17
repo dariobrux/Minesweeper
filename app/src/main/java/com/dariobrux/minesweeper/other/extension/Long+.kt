@@ -1,4 +1,4 @@
-package com.dariobrux.minesweeper.other
+package com.dariobrux.minesweeper.other.extension
 
 import java.text.SimpleDateFormat
 import java.util.*

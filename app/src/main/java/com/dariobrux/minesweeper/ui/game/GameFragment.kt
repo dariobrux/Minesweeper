@@ -13,6 +13,7 @@ import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.other.*
+import com.dariobrux.minesweeper.other.extension.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_game.*
 import org.aviran.cookiebar2.CookieBar
@@ -139,6 +140,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * @param position the position of the tile in the grid
      */
     override fun onItemSelected(item: Tile, position: Int) {
+
         viewModel.selectTile(item, position) { index, remainingNotBombTiles ->
             adapter.notifyItemChanged(index)
 
@@ -150,8 +152,16 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
         }
 
         // You have discover a bomb. You lose.
-        if (item.type == Type.BOMB) {
-            endGame(EndCause.BOMB)
+        when (item.type) {
+            Type.BOMB -> {
+                // Vibrate the phone
+                requireContext().vibrate(300)
+                endGame(EndCause.BOMB)
+            }
+            else -> {
+                // Vibrate the phone
+                requireContext().vibrate(50)
+            }
         }
     }
 

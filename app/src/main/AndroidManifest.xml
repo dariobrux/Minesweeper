@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dariobrux.minesweeper">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"

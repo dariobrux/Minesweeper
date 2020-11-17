@@ -1,4 +1,4 @@
-package com.dariobrux.minesweeper.other
+package com.dariobrux.minesweeper.other.extension
 
 /**
  * Shuffle items in an array.

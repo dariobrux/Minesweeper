@@ -4,7 +4,7 @@ import android.util.Log
 import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
-import com.dariobrux.minesweeper.other.shuffled
+import com.dariobrux.minesweeper.other.extension.shuffled
 
 class GameFactory {
 

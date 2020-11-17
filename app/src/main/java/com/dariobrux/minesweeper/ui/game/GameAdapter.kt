@@ -12,8 +12,8 @@ import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
-import com.dariobrux.minesweeper.other.sqrt
-import com.dariobrux.minesweeper.other.toVisible
+import com.dariobrux.minesweeper.other.extension.sqrt
+import com.dariobrux.minesweeper.other.extension.toVisible
 import com.dariobrux.minesweeper.ui.game.GameAdapter.GameViewHolder
 import com.google.android.material.card.MaterialCardView
 

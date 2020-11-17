@@ -1,4 +1,4 @@
-package com.dariobrux.minesweeper.other
+package com.dariobrux.minesweeper.other.extension
 
 import android.view.View
 
