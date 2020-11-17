@@ -34,7 +34,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
     private val viewModel: GameViewModel by viewModels()
 
     /**
-     * This is the timer that appears when the app launches, showind a countdown
+     * This is the timer that appears when the app launches, showing a countdown
      * in the middle of the screen.
      */
     private val timerPreLaunch: Timer = Timer().apply {

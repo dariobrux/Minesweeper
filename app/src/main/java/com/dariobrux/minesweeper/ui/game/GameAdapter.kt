@@ -41,7 +41,7 @@ class GameAdapter(private val context: Context, private val items: List<Tile>, p
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): GameViewHolder {
-        val view = View.inflate(context, R.layout.item_tile, null);
+        val view = View.inflate(context, R.layout.item_tile, null)
         val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, viewGroup.width / items.size.sqrt())
         view.layoutParams = params
         return GameViewHolder(view)
