@@ -7,7 +7,7 @@ class TimerManager(val duration: Long) {
     private var timer: CountDownTimer? = null
 
     fun init(listener: ITimerManagerListener) {
-        timer = object : CountDownTimer(duration, 1000L) {
+        timer = object : CountDownTimer(duration, 500L) {
 
             /**
              * Callback fired on regular interval.

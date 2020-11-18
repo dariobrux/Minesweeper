@@ -65,7 +65,7 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
              */
             override fun onTimerRun(millis: Long) {
                 Timber.tag(TAG).d("Game starts in $millis")
-                txtPreTimer?.text = if (millis != 0L) {
+                txtPreTimer?.text = if (millis > 1_000) {
                     millis.toFormattedTime("s")
                 } else {
                     getString(R.string.start)
