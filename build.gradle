@@ -3,28 +3,26 @@ buildscript {
 
     ext {
         hilt_version = '2.29.1-alpha'
-        kotlin_version = "1.4.10"
-        nav_version = '2.3.1'
+        kotlin_version = "1.6.10"
+        nav_version = '2.4.1'
     }
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.38.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }

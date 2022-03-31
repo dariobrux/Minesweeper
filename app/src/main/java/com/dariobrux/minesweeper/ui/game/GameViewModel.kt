@@ -1,12 +1,14 @@
 package com.dariobrux.minesweeper.ui.game
 
-import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
 import com.dariobrux.minesweeper.logic.GameFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  *
@@ -15,19 +17,21 @@ import com.dariobrux.minesweeper.logic.GameFactory
  * This is the ViewModel, with logic interaction between the game and the fragment.
  *
  */
-class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFactory) : ViewModel() {
+@HiltViewModel
+class GameViewModel @Inject constructor(private val gameFactory: GameFactory) : ViewModel() {
 
     /**
      * This is the player score. It increments when a tile (!= bomb) is discovered.
      */
-    val score = MutableLiveData(0)
+    private val _score = MutableLiveData(0)
+    val score: LiveData<Int> = _score
 
     /**
      * Get the board created by [GameFactory]
      * @return the list with all [Tile] representing the board.
      */
     fun getBoard(): List<Tile> {
-        score.value = 0
+        _score.value = 0
         return gameFactory.getBoard()
     }
 
@@ -104,7 +108,7 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      */
     private fun processTileScore(tile: Tile, touchedIndex: Int, index: Int, onDiscovered: (Int, Int) -> Unit) {
         processTile(tile, touchedIndex, index, onDiscovered)
-        score.value = score.value?.plus(1)
+        _score.value = _score.value?.plus(1)
     }
 
     /**
@@ -115,6 +119,6 @@ class GameViewModel @ViewModelInject constructor(private val gameFactory: GameFa
      */
     private fun processTileScore(tile: Tile, touchedIndex: Int, onDiscovered: (Int, Int) -> Unit) {
         processTile(tile, touchedIndex, touchedIndex, onDiscovered)
-        score.value = score.value?.plus(1)
+        _score.value = _score.value?.plus(1)
     }
 }

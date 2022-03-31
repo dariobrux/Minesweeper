@@ -1,16 +1,13 @@
 package com.dariobrux.minesweeper.di
 
-import android.app.Activity
 import com.dariobrux.minesweeper.logic.GameFactory
 import com.dariobrux.minesweeper.logic.manager.TimerManager
 import com.dariobrux.minesweeper.other.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ActivityContext
-import org.aviran.cookiebar2.CookieBar
-import javax.inject.Named
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 /**
@@ -21,18 +18,28 @@ import javax.inject.Singleton
  *
  */
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Singleton
     @Provides
     fun provideGameFactory() = GameFactory()
 
+    @Singleton
     @Provides
-    @Named("shortTimer")
-    fun provideTimerStartGame() = TimerManager(Constants.TIMER_COUNTDOWN)
+    @ShortTimer
+    fun provideTimerStartGame() : TimerManager = TimerManager(Constants.TIMER_COUNTDOWN)
 
+    @Singleton
     @Provides
-    @Named("longTimer")
-    fun provideTimerPlayGame() = TimerManager(Constants.TIMER_GAME)
+    @LongTimer
+    fun provideTimerPlayGame() : TimerManager = TimerManager(Constants.TIMER_GAME)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ShortTimer
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class LongTimer

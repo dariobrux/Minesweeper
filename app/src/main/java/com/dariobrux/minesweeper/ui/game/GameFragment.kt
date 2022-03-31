@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.dariobrux.minesweeper.R
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
+import com.dariobrux.minesweeper.di.AppModule
+import com.dariobrux.minesweeper.di.LongTimer
+import com.dariobrux.minesweeper.di.ShortTimer
 import com.dariobrux.minesweeper.logic.manager.ITimerManagerListener
 import com.dariobrux.minesweeper.logic.manager.TimerManager
 import com.dariobrux.minesweeper.other.Constants
@@ -21,6 +24,7 @@ import org.aviran.cookiebar2.CookieBar
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Qualifier
 
 /**
  *
@@ -42,14 +46,14 @@ class GameFragment : Fragment(), GameAdapter.OnItemSelectedListener {
      * in the middle of the screen.
      */
     @Inject
-    @Named("shortTimer")
+    @ShortTimer
     lateinit var timerPreLaunch: TimerManager
 
     /**
      * This is the timer game.
      */
     @Inject
-    @Named("longTimer")
+    @LongTimer
     lateinit var timerGame: TimerManager
 
     private var cookieBar: CookieBar? = null

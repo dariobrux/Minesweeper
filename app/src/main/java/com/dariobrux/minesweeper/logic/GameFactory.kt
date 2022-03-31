@@ -1,6 +1,5 @@
 package com.dariobrux.minesweeper.logic
 
-import android.util.Log
 import com.dariobrux.minesweeper.data.State
 import com.dariobrux.minesweeper.data.Tile
 import com.dariobrux.minesweeper.data.Type
