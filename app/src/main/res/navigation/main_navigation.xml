@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/gameFragment">
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.dariobrux.minesweeper.ui.splash.SplashFragment"
+        android:label="splash_fragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/gameFragment"
