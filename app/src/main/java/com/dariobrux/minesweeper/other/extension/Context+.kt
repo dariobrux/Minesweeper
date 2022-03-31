@@ -1,9 +1,11 @@
 package com.dariobrux.minesweeper.other.extension
 
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import java.util.concurrent.TimeUnit
 
 /**
@@ -19,7 +21,13 @@ import java.util.concurrent.TimeUnit
  * @param duration the vibration duration
  */
 fun Context.vibrate(duration: Long) {
-    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        vibratorManager.defaultVibrator
+    } else {
+        @Suppress("DEPRECATION")
+        getSystemService(VIBRATOR_SERVICE) as Vibrator
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val vibrationEffect = VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
         vibrator.vibrate(vibrationEffect)
